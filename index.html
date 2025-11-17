@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Active Next-Best-View Optimization for Risk-Averse Path Planning</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      max-width: 950px;
+      margin: 40px auto;
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      padding: 0 10px;
+    }
+    h1, h2, h3 {
+      font-family: Arial, sans-serif;
+    }
+    .title {
+      text-align: center;
+    }
+    .authors {
+      text-align: center;
+      font-size: 0.95em;
+    }
+    .venue {
+      text-align: center;
+      font-size: 0.9em;
+      color: #555;
+    }
+    .links {
+      text-align: center;
+      margin: 20px 0;
+    }
+    .links a {
+      margin: 0 6px;
+      text-decoration: none;
+      border: 1px solid #333;
+      padding: 6px 12px;
+      border-radius: 4px;
+      font-size: 0.95em;
+    }
+    img.teaser {
+      display: block;
+      margin: 20px auto;
+      max-width: 100%;
+      border-radius: 6px;
+    }
+    pre {
+      background: #f5f5f5;
+      padding: 10px;
+      overflow-x: auto;
+    }
+    code {
+      font-family: Consolas, monospace;
+    }
+    hr {
+      margin: 30px 0;
+    }
+    .section {
+      margin-bottom: 30px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Title + authors -->
+  <div class="title">
+    <h1>Active Next-Best-View Optimization for Risk-Averse Path Planning</h1>
+  </div>
+
+  <div class="authors">
+    <p>
+      Amirhossein Mollaei Khass,
+      Guangyi Liu,
+      Vivek Pandey,
+      Wen Jiang,
+      Boshu Lei,
+      Kostas Daniilidis,
+      Nader Motee
+    </p>
+  </div>
+
+  <div class="venue">
+    <p>arXiv preprint, 2025</p>
+  </div>
+
+  <!-- Links row -->
+  <div class="links">
+    <!-- Direct link to arXiv PDF -->
+    <a href="https://arxiv.org/pdf/2510.06481.pdf" target="_blank">[PDF on arXiv]</a>
+
+    <!-- Link to this GitHub repo as the code base -->
+    <a href="https://github.com/AmirhosseinMollaei/Risk-Averse-Next-best-view-selection" target="_blank">[Code]</a>
+
+    <!-- Link to video section -->
+    <a href="#video">[Video]</a>
+
+    <!-- Link to BibTeX section -->
+    <a href="#bibtex">[BibTeX]</a>
+  </div>
+
+  <!-- Teaser image (your uploaded Diagramimp.png) -->
+  <img src="Diagramimp.png" alt="Risk-averse NBV pipeline" class="teaser">
+
+  <!-- Abstract -->
+  <div class="section">
+    <h2>Abstract</h2>
+    <p>
+      Safe navigation in partially known environments requires a robot to reason about both motion risk
+      and the value of future observations. This work introduces a unified framework that starts from a
+      coarse reference path and refines it using risk maps constructed from Average Value-at-Risk (AVaR)
+      statistics computed on an online 3D Gaussian-splat radiance field. The resulting risk field is used
+      to generate locally safe and dynamically feasible trajectories.
+    </p>
+    <p>
+      In parallel, we formulate next-best-view (NBV) selection as an optimization problem on the pose
+      manifold, where a Riemannian gradient scheme maximizes an expected information gain objective
+      that focuses on regions most critical for imminent motion. By tightly coupling risk-aware path
+      refinement with NBV planning and leveraging decomposable gradients for scalability, the method
+      enables efficient, perception-aware, risk-averse navigation in complex environments.
+    </p>
+  </div>
+
+  <!-- Video section (self-hosted video) -->
+  <div class="section" id="video">
+    <h2>Video</h2>
+    <p>The project video can be viewed below (upload <code>video.mp4</code> to this repository):</p>
+
+    <video width="720" controls>
+      <source src="video.mp4" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+
+    <p style="font-size:0.9em; color:#555;">
+      If the embedded player does not work in your browser, you can
+      <a href="video.mp4" target="_blank">download the video here</a>.
+    </p>
+  </div>
+
+  <!-- Method overview -->
+  <div class="section">
+    <h2>Method Overview</h2>
+    <p>
+      The framework assumes a robot equipped with onboard sensing and a coarse global reference path.
+      A 3D Gaussian-splatting SLAM backbone maintains an online radiance-field representation of the
+      environment. At every planning cycle, AVaR-based collision risk is evaluated over a grid,
+      yielding a conservative risk field. A local A*-based planner then searches over a filtered
+      safe subset of grid points to synthesize a short horizon, risk-averse trajectory segment toward
+      the next subgoal.
+    </p>
+    <p>
+      To actively improve the map where it matters most for upcoming motion, the environment is masked
+      around the locally planned trajectory. NBV poses are optimized on SE(3) using a proximity-weighted
+      Fisher-information objective that prioritizes Gaussians inside this masked region. This couples
+      motion planning and active perception: executed controls move the robot along a safe path while
+      the selected views reduce uncertainty in high-risk zones.
+    </p>
+  </div>
+
+  <!-- Results (you can later add real figures here) -->
+  <div class="section">
+    <h2>Results</h2>
+    <p>
+      We validate the proposed approach in simulated environments by comparing the refined,
+      risk-averse trajectories against shortest-path baselines. The risk-aware paths maintain
+      greater clearance from high-risk regions at the cost of modest path-length increases, and
+      the NBV strategy yields more informative reconstructions near the executed trajectories.
+      Quantitative evaluations highlight improvements in tail-risk metrics and map quality
+      relative to existing baselines.
+    </p>
+
+    <!-- When you have more figures, add them like this:
+    <h3>Risk-aware path vs. shortest path</h3>
+    <img src="figure1.png" alt="Shortest vs risk-aware path" style="max-width: 100%;">
+    -->
+  </div>
+
+  <!-- BibTeX -->
+  <div class="section" id="bibtex">
+    <h2>BibTeX</h2>
+    <pre><code>@article{khass2025activeNBV,
+  title   = {Active Next-Best-View Optimization for Risk-Averse Path Planning},
+  author  = {Mollaei Khass, Amirhossein and Liu, Guangyi and Pandey, Vivek and
+             Jiang, Wen and Lei, Boshu and Daniilidis, Kostas and Motee, Nader},
+  journal = {arXiv preprint arXiv:2510.06481},
+  year    = {2025}
+}</code></pre>
+  </div>
+
+  <!-- Contact -->
+  <div class="section">
+    <h2>Contact</h2>
+    <p>
+      For questions about this work, please contact:
+      <a href="mailto:ammb23@lehigh.edu">ammb23@lehigh.edu</a>
+    </p>
+  </div>
+
+</body>
+</html>
